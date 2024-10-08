@@ -88,6 +88,15 @@ public class WebStack : Stack
             OriginRequestPolicy = OriginRequestPolicy.ALL_VIEWER
         };
         
+        var todoBehaviorOptions = new BehaviorOptions
+        {
+            Origin = new LoadBalancerV2Origin(userLoadBalancer),
+            ViewerProtocolPolicy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+            AllowedMethods = AllowedMethods.ALLOW_ALL,
+            CachePolicy = CachePolicy.CACHING_DISABLED,
+            OriginRequestPolicy = OriginRequestPolicy.ALL_VIEWER
+        };
+        
         var todoItDistribution = new Distribution(this, serviceNamespace + ".CloudFront.Distribution", new DistributionProps
         {
             DefaultBehavior = new BehaviorOptions
@@ -100,6 +109,7 @@ public class WebStack : Stack
             AdditionalBehaviors = new Dictionary<string, IBehaviorOptions>
             {
                 ["/api/user/*"] = userBehaviorOptions,
+                ["/api/todo/*"] = todoBehaviorOptions,
             },
             DefaultRootObject = "index.html",
             Certificate = todoCertificate,

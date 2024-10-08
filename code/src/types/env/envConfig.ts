@@ -6,4 +6,5 @@ export enum EnvTypes {
 export interface EnvConfig {
   env: EnvTypes;
   userServiceBaseUrl: string;
+  todoServiceBaseUrl: string;
 }

@@ -1,46 +1,57 @@
 import {
-  Box, CircularProgress, useMediaQuery, useTheme,
+  Box, CircularProgress, styled,
 } from '@mui/material';
-import { useState } from 'react';
-import ContactsIcon from '@mui/icons-material/Contacts';
-import Page from '../Page/Page';
-import { BottomNavigation, MiniDrawer, NavigationItem } from '../../components/Navigation';
+import { useContext, useState } from 'react';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { BottomNavigation, NavigationItem } from '../../components/Navigation';
+import WrappedTodosDisplay from '../../displays/Todos/TodosDisplay';
+import MenuBar from '../../components/MenuBar';
+import { UserContext } from '../../context/UserContext';
+
+const MenuBarPxHeight = '70px';
+
+const InnerStyledBox = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(3),
+  overflowY: 'auto',
+  flexGrow: 1,
+}));
+
+const OuterStyledBox = styled(Box)(() => ({
+  width: '100vw',
+  height: '100vh',
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+}));
 
 function AccountPage() {
-  const [Display, setDisplay] = useState<JSX.Element>(<CircularProgress />);
+  const { isLoading } = useContext(UserContext);
+  const [Display, setDisplay] = useState<JSX.Element>(<WrappedTodosDisplay />);
 
-  const handleContactMethodsOnClick = () => {
+  const handleTodoOnClick = () => {
     setDisplay(
-      <CircularProgress />,
+      <WrappedTodosDisplay />,
     );
   };
 
-  const theme = useTheme();
-  const isBiggerThanSmall = useMediaQuery(theme.breakpoints.up('sm'));
-
   const items: NavigationItem[] = [
     {
-      displayName: 'Contacts',
-      onclick: handleContactMethodsOnClick,
-      Icon: ContactsIcon,
+      displayName: 'My Todos',
+      onclick: handleTodoOnClick,
+      Icon: CheckBoxIcon,
     },
   ];
 
   return (
-    <Page>
-      <MiniDrawer hide={!isBiggerThanSmall} items={items} />
-      <Box sx={{
-        flex: 1,
-        padding: '26px',
-        display: 'flex',
-      }}
-      >
-        {
-          Display
-        }
-      </Box>
-      <BottomNavigation hide={isBiggerThanSmall} items={items} />
-    </Page>
+    <OuterStyledBox>
+      <MenuBar height={MenuBarPxHeight} />
+      {
+        isLoading
+          ? <CircularProgress sx={{ justifySelf: 'center', alignSelf: 'center' }} />
+          : <InnerStyledBox>{Display}</InnerStyledBox>
+      }
+      <BottomNavigation items={items} />
+    </OuterStyledBox>
   );
 }
 

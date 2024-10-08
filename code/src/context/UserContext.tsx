@@ -95,11 +95,13 @@ function UserProvider({ children }: UserContextProps) {
     }
   }, [authUser, handleGetUser]);
 
+  const isLoading = !user && isPending;
+
   const contextValue = useMemo<IUserContext>(
     () => ({
       user,
       signOut: handleSignOut,
-      isLoading: isPending,
+      isLoading,
     }),
     [user, handleSignOut],
   );

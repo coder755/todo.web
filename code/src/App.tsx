@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Grid } from '@mui/material';
+import { CssBaseline, Grid } from '@mui/material';
 import { RouterProvider } from 'react-router-dom';
 import { getRouter } from './pages/Router';
 import UserProvider from './context/UserContext';
@@ -9,6 +9,7 @@ function App(): ReactElement {
 
   return (
     <UserProvider>
+      <CssBaseline />
       <Grid
         container
         spacing={0}
