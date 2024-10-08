@@ -58,10 +58,6 @@ function TodosProvider({ children }: TodosContextProps) {
     return postTodoResponse.success;
   }, [setIsLoading, handleGetTodos]);
 
-  useEffect(() => {
-    handleGetTodos();
-  }, [handleGetTodos]);
-
   const handleCompleteTodo = useCallback(async (todoId: string) => {
     setIsLoading(true);
     const postTodoCompletedResponse = await postTodoCompleted(todoId);

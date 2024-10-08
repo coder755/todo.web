@@ -3,6 +3,7 @@ import {
 } from 'react';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { AmplifyUser, AuthEventData } from '@aws-amplify/ui';
+import { Box } from '@mui/material';
 import { configureAmplify } from '../auth/amplifyConfig';
 import { User } from '../models/User';
 import { getUser, postUser } from '../api/userApi';
@@ -125,6 +126,9 @@ function WrappedUserProvider({ children }: WrappedUserProviderProps) {
   configureAmplify();
   return (
     <Authenticator.Provider>
+      <Box sx={{ display: 'none' }}>
+        <Authenticator />
+      </Box>
       <UserProvider>
         {
           children

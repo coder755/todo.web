@@ -17,7 +17,6 @@ const StyledBox = styled(Box)(() => ({
 
 function TodosDisplay() {
   const { isLoading, todos, completeTodo } = useContext(TodosContext);
-
   return (
     <StyledBox>
       <Typography variant="h5" gutterBottom sx={{ alignSelf: 'center' }}>Your Todos</Typography>
@@ -27,7 +26,7 @@ function TodosDisplay() {
       </ModalWithButton>
       {
         isLoading ? (
-          <CircularProgress />
+          <CircularProgress sx={{ alignSelf: 'center' }} />
         )
           : (
             <Box sx={{ width: '100%' }}>
