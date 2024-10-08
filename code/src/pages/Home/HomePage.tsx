@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import {
-  Box, CircularProgress, styled, Typography,
+  Box, CircularProgress, Link, styled, Typography,
 } from '@mui/material';
 import Page from '../Page/Page';
 import { UserContext } from '../../context/UserContext';
@@ -44,10 +44,15 @@ function HomePage() {
   return (
     <Page isPublic>
       <StyledBox>
-        <Typography>Welcome to Coder&apos;s Todo App</Typography>
+        <Typography variant="h3">Welcome to Coder&apos;s Todo App</Typography>
         {
-        getInternalDisplay()
-      }
+          getInternalDisplay()
+        }
+        <Typography>
+          All the code used to make this app can be viewed at
+          {' '}
+          <Link href="https://github.com/coder755?tab=repositories">Coder&apos;s Github</Link>
+        </Typography>
       </StyledBox>
     </Page>
   );

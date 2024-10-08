@@ -127,7 +127,7 @@ function WrappedUserProvider({ children }: WrappedUserProviderProps) {
   return (
     <Authenticator.Provider>
       <Box sx={{ display: 'none' }}>
-        <Authenticator />
+        <Authenticator signUpAttributes={['email', 'given_name', 'family_name', 'preferred_username']} loginMechanisms={['email']} />
       </Box>
       <UserProvider>
         {

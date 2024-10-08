@@ -17,14 +17,14 @@ export const getUser = async (): Promise<GetUserResponse | UserError> => {
   };
   try {
     const response = await fetch(url, requestInit);
-    if (response.ok) {
+    if (response.status === 200) {
       const user = await response.json() as UserDto;
       const result: GetUserResponse = {
         user,
         success: true,
       };
       return result;
-    } if (response.status === 404) {
+    } if (response.status === 204) {
       return {
         success: false,
         errorCode: USER_ERROR_CODES.DOES_NOT_EXIST,
