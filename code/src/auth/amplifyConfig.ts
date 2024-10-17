@@ -15,10 +15,10 @@ export const configureAmplify = () => {
       // identityPoolRegion: 'XX-XXXX-X',
 
       // OPTIONAL - Amazon Cognito User Pool ID
-      userPoolId: 'us-east-1_XpLTz3d0K',
+      userPoolId: 'us-east-1_Bjw6HeTgZ',
 
       // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
-      userPoolWebClientId: '1drk8o012rvv7ejrutsmj0d080',
+      userPoolWebClientId: '74mj813n95kd4lldddq2a8obpd',
 
       // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
       mandatorySignIn: false,

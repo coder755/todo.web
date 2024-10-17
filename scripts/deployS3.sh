@@ -39,5 +39,5 @@ fi
 
 cd dist
 export AWS_DEFAULT_PROFILE=coderPark
-aws s3 cp . s3://todo.web.bucket --recursive
-aws cloudfront create-invalidation --distribution-id E3IUEM4CUC7N9O --paths "/*"
+aws s3 cp . s3://todo.frontend.bucket --recursive
+aws cloudfront create-invalidation --distribution-id E2PD5CX2USJEXG --paths "/*"
