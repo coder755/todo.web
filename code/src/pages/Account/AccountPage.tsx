@@ -5,10 +5,8 @@ import { useContext, useState } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { BottomNavigation, NavigationItem } from '../../components/Navigation';
 import WrappedTodosDisplay from '../../displays/Todos/TodosDisplay';
-import MenuBar from '../../components/MenuBar';
 import { UserContext } from '../../context/UserContext';
-
-const MenuBarPxHeight = '70px';
+import Page from '../Page/Page';
 
 const InnerStyledBox = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -43,15 +41,16 @@ function AccountPage() {
   ];
 
   return (
-    <OuterStyledBox>
-      <MenuBar height={MenuBarPxHeight} />
-      {
+    <Page isPublic={false}>
+      <OuterStyledBox>
+        {
         isLoading
           ? <CircularProgress sx={{ justifySelf: 'center', alignSelf: 'center' }} />
           : <InnerStyledBox>{Display}</InnerStyledBox>
       }
-      <BottomNavigation items={items} />
-    </OuterStyledBox>
+        <BottomNavigation items={items} />
+      </OuterStyledBox>
+    </Page>
   );
 }
 

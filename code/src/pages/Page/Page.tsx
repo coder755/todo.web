@@ -36,12 +36,12 @@ function Page(props: PageProps) {
   }, [isPublic, user, navigate]);
 
   return (
-    <>
+    <StyledBox>
       <MenuBar height={MenuBarPxHeight} />
-      <StyledBox>
+      <Box sx={{ flex: 1 }}>
         { children }
-      </StyledBox>
-    </>
+      </Box>
+    </StyledBox>
   );
 }
 
