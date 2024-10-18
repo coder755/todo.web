@@ -35,5 +35,4 @@ export interface PostUserRequest {
 }
 
 export interface PostUserResponse extends UserBaseResponse {
-  user: UserDto
 }

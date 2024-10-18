@@ -3,24 +3,26 @@ import {
 } from 'react';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { AmplifyUser, AuthEventData } from '@aws-amplify/ui';
-import { Box } from '@mui/material';
+// import { Box } from '@mui/material';
 import { configureAmplify } from '../auth/amplifyConfig';
 import { User } from '../models/User';
 import { getUser, postUser } from '../api/userApi';
 import {
-  GetUserResponse, PostUserRequest, PostUserResponse, USER_ERROR_CODES, UserError,
+  GetUserResponse, PostUserRequest, USER_ERROR_CODES, UserError,
 } from '../types/services/user/userTypes';
 
 interface IUserContext {
   user: User | null,
   signOut: (data?: AuthEventData | undefined) => void,
   isLoading: boolean,
+  errorMessage: string,
 }
 
 const defaultState: IUserContext = {
   user: null,
   signOut: () => {},
   isLoading: true,
+  errorMessage: ''
 };
 
 export const UserContext = createContext<IUserContext>(defaultState);
@@ -44,6 +46,20 @@ function UserProvider({ children }: UserContextProps) {
     user: authUser, signOut: authSignOut, isPending,
   } = useAuthenticator((context) => [context.user]);
   const [user, setUser] = useState(defaultState.user);
+  const [errorMessage, setErrorMessage] = useState(defaultState.errorMessage);
+
+  const handleGetUser = useCallback(async () => {
+    const getUserResponse = await getUser();
+    if (getUserResponse.success) {
+      const res = getUserResponse as GetUserResponse;
+      const fetchedUser = new User(res);
+      setUser(fetchedUser);
+      setErrorMessage('');
+    } else {
+      setUser(null);
+      setErrorMessage("Error attempting to get user");
+    }
+  }, [setUser]);
 
   const handlePostUser = useCallback(async (recievedUser: MyAmplifyUser) => {
     const {
@@ -59,26 +75,28 @@ function UserProvider({ children }: UserContextProps) {
     };
     const postUserResponse = await postUser(requestBody);
     if (postUserResponse.success) {
-      const res = postUserResponse as PostUserResponse;
-      const postedUser = new User(res);
-      setUser(postedUser);
+      handleGetUser()
+      setErrorMessage('');
     } else {
       setUser(null);
+      setErrorMessage("Error attempting to post user");
     }
   }, [setUser]);
 
-  const handleGetUser = useCallback(async (recievedUser: MyAmplifyUser) => {
+  const handleInitGetUser = useCallback(async (recievedUser: MyAmplifyUser) => {
     const getUserResponse = await getUser();
     if (getUserResponse.success) {
       const res = getUserResponse as GetUserResponse;
       const fetchedUser = new User(res);
       setUser(fetchedUser);
+      setErrorMessage('');
     } else {
       const res = getUserResponse as UserError;
       if (res.errorCode === USER_ERROR_CODES.DOES_NOT_EXIST) {
         handlePostUser(recievedUser);
       } else {
         setUser(null);
+        setErrorMessage("Error attempting to init get user");
       }
     }
   }, [setUser, handlePostUser]);
@@ -90,11 +108,11 @@ function UserProvider({ children }: UserContextProps) {
 
   useEffect(() => {
     if (authUser) {
-      handleGetUser(authUser as MyAmplifyUser);
+      handleInitGetUser(authUser as MyAmplifyUser);
     } else {
       setUser(null);
     }
-  }, [authUser, handleGetUser]);
+  }, [authUser, handleInitGetUser]);
 
   const isLoading = !user && isPending;
 
@@ -103,6 +121,7 @@ function UserProvider({ children }: UserContextProps) {
       user,
       signOut: handleSignOut,
       isLoading,
+      errorMessage
     }),
     [user, handleSignOut],
   );
@@ -126,9 +145,9 @@ function WrappedUserProvider({ children }: WrappedUserProviderProps) {
   configureAmplify();
   return (
     <Authenticator.Provider>
-      <Box sx={{ display: 'none' }}>
+      {/* <Box sx={{ display: 'none' }}>
         <Authenticator signUpAttributes={['email', 'given_name', 'family_name', 'preferred_username']} loginMechanisms={['email']} />
-      </Box>
+      </Box> */}
       <UserProvider>
         {
           children
