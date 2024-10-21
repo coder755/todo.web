@@ -3,17 +3,20 @@ import { EnvConfig, EnvTypes } from '../types/env/envConfig';
 const BASE_URL = 'huckandrose.com';
 
 const HUCK_AND_ROSE_URL = `https://${BASE_URL}`;
+const WEB_SOCKET_URL = `wss://${BASE_URL}`;
 
 const prodConfig: EnvConfig = {
   env: EnvTypes.PROD,
   userServiceBaseUrl: HUCK_AND_ROSE_URL,
   todoServiceBaseUrl: HUCK_AND_ROSE_URL,
+  webSocketBaseUrl: WEB_SOCKET_URL,
 };
 
 const devConfig: EnvConfig = {
   env: EnvTypes.DEV,
   userServiceBaseUrl: 'http://localhost:5224',
   todoServiceBaseUrl: 'http://localhost:5224',
+  webSocketBaseUrl: 'ws://localhost:5224',
 };
 
 export const getEnvConfig = (): EnvConfig => {

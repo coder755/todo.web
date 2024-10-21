@@ -55,10 +55,8 @@ export const postUser = async (
   };
   try {
     const response = await fetch(url, requestInit);
-    if (response.ok) {
-      const result = await response.json();
-      result.success = true;
-      return result;
+    if (response.status === 202) {
+      return { success: true };
     }
     const errorCode = getUserErrorCode(response.status);
     const errorResponse: UserError = {

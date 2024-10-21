@@ -3,7 +3,6 @@ import { useContext, useState } from 'react';
 import {
   TextField, Button, Typography, CircularProgress, Paper,
 } from '@mui/material';
-import 'react-phone-number-input/style.css';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TodosContext } from '../../context/TodosContext';
 import { PostTodoRequest } from '../../types/services/todos/todoTypes';

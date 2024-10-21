@@ -1,15 +1,15 @@
 import {
-  createContext, useCallback, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
-import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 import { AmplifyUser, AuthEventData } from '@aws-amplify/ui';
-// import { Box } from '@mui/material';
-import { configureAmplify } from '../auth/amplifyConfig';
 import { User } from '../models/User';
 import { getUser, postUser } from '../api/userApi';
 import {
   GetUserResponse, PostUserRequest, USER_ERROR_CODES, UserError,
 } from '../types/services/user/userTypes';
+import { WebSocketContext } from './WebSocketContext';
+import { MessageTypes } from '../api/WS';
 
 interface IUserContext {
   user: User | null,
@@ -22,7 +22,7 @@ const defaultState: IUserContext = {
   user: null,
   signOut: () => {},
   isLoading: true,
-  errorMessage: ''
+  errorMessage: '',
 };
 
 export const UserContext = createContext<IUserContext>(defaultState);
@@ -41,7 +41,10 @@ type MyCognitoAttributes = {
 
 type MyAmplifyUser = AmplifyUser & { attributes: MyCognitoAttributes; };
 
+const UserCreatedListenerId = 'UserCTXUserCreatedListenerId';
+
 function UserProvider({ children }: UserContextProps) {
+  const { isWebsocketOpen, registerListener, removeListener } = useContext(WebSocketContext);
   const {
     user: authUser, signOut: authSignOut, isPending,
   } = useAuthenticator((context) => [context.user]);
@@ -57,7 +60,8 @@ function UserProvider({ children }: UserContextProps) {
       setErrorMessage('');
     } else {
       setUser(null);
-      setErrorMessage("Error attempting to get user");
+      removeListener(MessageTypes.UserCreated, UserCreatedListenerId);
+      setErrorMessage('Error attempting to get user');
     }
   }, [setUser]);
 
@@ -67,6 +71,7 @@ function UserProvider({ children }: UserContextProps) {
       preferred_username, email, given_name, family_name, sub,
     } = recievedUser.attributes;
     const requestBody: PostUserRequest = {
+      useQueue: true,
       id: sub,
       username: preferred_username,
       firstName: given_name,
@@ -75,13 +80,11 @@ function UserProvider({ children }: UserContextProps) {
     };
     const postUserResponse = await postUser(requestBody);
     if (postUserResponse.success) {
-      handleGetUser()
       setErrorMessage('');
     } else {
-      setUser(null);
-      setErrorMessage("Error attempting to post user");
+      setErrorMessage('Error attempting to post user');
     }
-  }, [setUser]);
+  }, []);
 
   const handleInitGetUser = useCallback(async (recievedUser: MyAmplifyUser) => {
     const getUserResponse = await getUser();
@@ -93,10 +96,15 @@ function UserProvider({ children }: UserContextProps) {
     } else {
       const res = getUserResponse as UserError;
       if (res.errorCode === USER_ERROR_CODES.DOES_NOT_EXIST) {
+        const registerRequest = {
+          id: UserCreatedListenerId,
+          callback: handleGetUser,
+        };
+        registerListener(MessageTypes.UserCreated, registerRequest);
         handlePostUser(recievedUser);
       } else {
         setUser(null);
-        setErrorMessage("Error attempting to init get user");
+        setErrorMessage('Error attempting to init get user');
       }
     }
   }, [setUser, handlePostUser]);
@@ -107,12 +115,12 @@ function UserProvider({ children }: UserContextProps) {
   }, [authSignOut]);
 
   useEffect(() => {
-    if (authUser) {
+    if (authUser && isWebsocketOpen) {
       handleInitGetUser(authUser as MyAmplifyUser);
     } else {
       setUser(null);
     }
-  }, [authUser, handleInitGetUser]);
+  }, [authUser, isWebsocketOpen]);
 
   const isLoading = !user && isPending;
 
@@ -121,7 +129,7 @@ function UserProvider({ children }: UserContextProps) {
       user,
       signOut: handleSignOut,
       isLoading,
-      errorMessage
+      errorMessage,
     }),
     [user, handleSignOut],
   );
@@ -137,24 +145,4 @@ function UserProvider({ children }: UserContextProps) {
   );
 }
 
-type WrappedUserProviderProps = {
-  children: React.ReactNode,
-};
-
-function WrappedUserProvider({ children }: WrappedUserProviderProps) {
-  configureAmplify();
-  return (
-    <Authenticator.Provider>
-      {/* <Box sx={{ display: 'none' }}>
-        <Authenticator signUpAttributes={['email', 'given_name', 'family_name', 'preferred_username']} loginMechanisms={['email']} />
-      </Box> */}
-      <UserProvider>
-        {
-          children
-        }
-      </UserProvider>
-    </Authenticator.Provider>
-  );
-}
-
-export default WrappedUserProvider;
+export default UserProvider;

@@ -27,6 +27,7 @@ export interface GetUserResponse extends UserBaseResponse {
 }
 
 export interface PostUserRequest {
+  useQueue: boolean,
   id: string,
   username: string,
   firstName: string,

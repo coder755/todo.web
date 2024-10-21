@@ -7,4 +7,5 @@ export interface EnvConfig {
   env: EnvTypes;
   userServiceBaseUrl: string;
   todoServiceBaseUrl: string;
+  webSocketBaseUrl: string;
 }
