@@ -22,7 +22,12 @@ function HomePage() {
     if (user) {
       return (
         <>
-          <Typography>Thanks for signing in. Checkout your account</Typography>
+          <Typography>
+            Hey
+            {' '}
+            {user.firstName}
+            . Thanks for signing in. Checkout your account
+          </Typography>
           {' '}
           <Typography>
             page to create and manage your ToDos.
@@ -49,9 +54,20 @@ function HomePage() {
           getInternalDisplay()
         }
         <Typography>
-          All the code used to make this app can be viewed at
+          This app is designed to create and update todos
+          {' '}
+          even when there aren&apos;t any database connections avaialable.
+          {' '}
+          Feel free to watch the network tab. You&apos;ll see that a Websocket gets created and
+          {' '}
+          acts as a notification service for when data is avaialable to fetch.
+          {' '}
+          To see architecture/flow diagrams and how the code works, check out
           {' '}
           <Link href="https://github.com/coder755?tab=repositories">Coder&apos;s Github</Link>
+        </Typography>
+        <Typography>
+          As an added bonus, the sourcmaps for the front end code are available as well.
         </Typography>
       </StyledBox>
     </Page>
