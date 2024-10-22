@@ -15,8 +15,8 @@ const InnerStyledBox = styled(Box)(({ theme }) => ({
 }));
 
 const OuterStyledBox = styled(Box)(() => ({
-  width: '100vw',
-  height: '100vh',
+  width: '100%',
+  height: '100%',
   display: 'flex',
   flexDirection: 'column',
   justifyContent: 'space-between',

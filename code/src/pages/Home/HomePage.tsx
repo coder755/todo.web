@@ -11,6 +11,10 @@ const StyledBox = styled(Box)(({ theme }) => ({
   textAlign: 'center',
   margin: theme.spacing(1),
 }));
+const StyledInnerBox = styled(Box)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'left',
+}));
 
 function HomePage() {
   const { user, isLoading } = useContext(UserContext);
@@ -21,18 +25,14 @@ function HomePage() {
     }
     if (user) {
       return (
-        <>
-          <Typography>
-            Hey
-            {' '}
-            {user.firstName}
-            . Thanks for signing in. Checkout your account
-          </Typography>
+        <Typography>
+          Hey
           {' '}
-          <Typography>
-            page to create and manage your ToDos.
-          </Typography>
-        </>
+          {user.firstName}
+          . Thanks for signing in. Checkout your account
+          {' '}
+          page to create and manage your ToDos.
+        </Typography>
       );
     }
     return (
@@ -50,25 +50,27 @@ function HomePage() {
     <Page isPublic>
       <StyledBox>
         <Typography variant="h3">Welcome to Coder&apos;s Todo App</Typography>
-        {
+        <StyledInnerBox>
+          {
           getInternalDisplay()
         }
-        <Typography>
-          This app is designed to create and update todos
-          {' '}
-          even when there aren&apos;t any database connections avaialable.
-          {' '}
-          Feel free to watch the network tab. You&apos;ll see that a Websocket gets created and
-          {' '}
-          acts as a notification service for when data is avaialable to fetch.
-          {' '}
-          To see architecture/flow diagrams and how the code works, check out
-          {' '}
-          <Link href="https://github.com/coder755?tab=repositories">Coder&apos;s Github</Link>
-        </Typography>
-        <Typography>
-          As an added bonus, the sourcmaps for the front end code are available as well.
-        </Typography>
+          <Typography mt={1}>
+            This app is designed to create and update todos
+            {' '}
+            even when no database connections avaialable.
+            {' '}
+            Feel free to watch the network tab. You&apos;ll see that a Websocket gets created and
+            {' '}
+            acts as a notification service for when data is avaialable to fetch.
+            {' '}
+            To see architecture/flow diagrams and how the code works, check out
+            {' '}
+            <Link href="https://github.com/coder755?tab=repositories">Coder&apos;s Github</Link>
+          </Typography>
+          <Typography mt={1}>
+            As an added bonus, the sourcmaps for the front end code are available as well.
+          </Typography>
+        </StyledInnerBox>
       </StyledBox>
     </Page>
   );

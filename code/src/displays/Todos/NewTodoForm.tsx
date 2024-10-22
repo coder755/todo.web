@@ -1,7 +1,8 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useContext, useState } from 'react';
 import {
-  TextField, Button, Typography, CircularProgress, Paper,
+  Checkbox, TextField, Button, Typography, CircularProgress, Paper,
+  FormControlLabel,
 } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { TodosContext } from '../../context/TodosContext';
@@ -9,12 +10,12 @@ import { PostTodoRequest } from '../../types/services/todos/todoTypes';
 
 interface FormData {
   name: string,
-  description: string,
+  useQueue: boolean,
 }
 
 const defaultState: FormData = {
   name: '',
-  description: '',
+  useQueue: false,
 };
 
 const isEmptyObject = (obj: Object) => Object.keys(obj).length === 0;
@@ -27,9 +28,10 @@ function NewTodoForm() {
     handleSubmit, formState: { errors }, register,
   } = useForm({ defaultValues: defaultState });
 
-  const onSubmit: SubmitHandler<FormData> = async ({ name }) => {
+  const onSubmit: SubmitHandler<FormData> = async ({ name, useQueue }) => {
     const requestData: PostTodoRequest = {
       name,
+      useQueue,
     };
     const isAddingSuccess = await addTodo(requestData);
     setIsAddSuccess(isAddingSuccess);
@@ -67,6 +69,15 @@ function NewTodoForm() {
             required: 'Name is required.',
           })}
         />
+        <FormControlLabel
+          label="Simulate database connection unavailable"
+          control={(
+            <Checkbox
+              {...register('useQueue')}
+            />
+          )}
+        />
+
         <Button disabled={!isEmptyObject(errors)} type="submit" variant="contained" color="primary" sx={{ my: 1 }}>
           Add Todo
         </Button>

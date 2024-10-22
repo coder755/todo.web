@@ -1,9 +1,11 @@
 import {
-  createContext, useCallback, useEffect, useMemo, useState,
+  createContext, useCallback, useContext, useEffect, useMemo, useState,
 } from 'react';
 import { Todo } from '../models/Todo';
 import { getTodos, postTodo, postTodoCompleted } from '../api/todosApi';
 import { GetTodosResponse, PostTodoRequest } from '../types/services/todos/todoTypes';
+import { WebSocketContext } from './WebSocketContext';
+import { MessageTypes } from '../api/WS';
 
 interface ITodosContext {
   isLoading: boolean,
@@ -25,15 +27,17 @@ type TodosContextProps = {
   children: React.ReactNode;
 };
 
+const TodoCreatedListenerId = 'TodoCTXTodoCreatedListenerId';
+
 function TodosProvider({ children }: TodosContextProps) {
+  const { isWebsocketOpen, registerListener } = useContext(WebSocketContext);
+
   const [isLoading, setIsLoading] = useState(defaultState.isLoading);
   const [todos, setTodos] = useState(defaultState.todos);
 
   const handleGetTodos = useCallback(async () => {
     setIsLoading(true);
     const getTodosResponse = await getTodos();
-    setIsLoading(false);
-
     if (getTodosResponse.success) {
       const res = getTodosResponse as GetTodosResponse;
       const newTodos: Todo[] = [];
@@ -44,6 +48,7 @@ function TodosProvider({ children }: TodosContextProps) {
     } else {
       console.error('Handle getTodos error');
     }
+    setIsLoading(false);
   }, [setIsLoading, setTodos]);
 
   const handlePostTodo = useCallback(async (postTodoRequest: PostTodoRequest) => {
@@ -73,6 +78,16 @@ function TodosProvider({ children }: TodosContextProps) {
   useEffect(() => {
     handleGetTodos();
   }, [handleGetTodos]);
+
+  useEffect(() => {
+    if (isWebsocketOpen) {
+      const registerRequest = {
+        id: TodoCreatedListenerId,
+        callback: handleGetTodos,
+      };
+      registerListener(MessageTypes.TodoCreated, registerRequest);
+    }
+  }, [isWebsocketOpen]);
 
   const contextValue = useMemo<ITodosContext>(() => ({
     isLoading,

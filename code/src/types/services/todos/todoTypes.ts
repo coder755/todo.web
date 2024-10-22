@@ -26,6 +26,7 @@ export interface GetTodosResponse extends TodoBaseResponse {
 
 export interface PostTodoRequest {
   name: string,
+  useQueue: boolean
 }
 
 export interface PostTodoResponse extends TodoBaseResponse {}
