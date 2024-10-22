@@ -63,12 +63,18 @@ function HomePage() {
             {' '}
             acts as a notification service for when data is avaialable to fetch.
             {' '}
-            To see architecture/flow diagrams and how the code works, check out
+            To see
+            {' '}
+            <Link href="https://miro.com/welcomeonboard/S202em5HMnRhQ0JSMURRZW90QzNiZk5NMzJXWmpaWTRCOHZsMlAzeHRCd3JTTWFheHhZcXg4ZmljUTZLWmk2TXwzNDU4NzY0NjA0MTk1NjE0NTg4fDI=?share_link_id=531797049135">architecture/flow diagrams</Link>
+            {' '}
+            or how the code works, check out
             {' '}
             <Link href="https://github.com/coder755?tab=repositories">Coder&apos;s Github</Link>
           </Typography>
           <Typography mt={1}>
-            As an added bonus, the sourcmaps for the front end code are available as well.
+            As an added bonus, the sourcmaps for the front end code are available in the source
+            {' '}
+            tab of the dev console.
           </Typography>
         </StyledInnerBox>
       </StyledBox>
