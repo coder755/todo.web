@@ -16,7 +16,8 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'flex-start',
   alignItems: 'center',
-  width: '300px',
+  [theme.breakpoints.down('md')]: { width: '300px' },
+  [theme.breakpoints.up('md')]: { width: '200px' },
   backgroundColor: 'white',
   boxShadow: '0px 0px 4px 2px rgba(0, 0, 0, 0.2)',
 }));
