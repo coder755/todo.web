@@ -17,7 +17,7 @@ function App(): ReactElement {
           spacing={0}
           direction="column"
           alignItems="center"
-          sx={{ minHeight: '100vh' }}
+          sx={{ height: '100%', width: '100%' }}
         >
           <RouterProvider router={router} />
         </Grid>

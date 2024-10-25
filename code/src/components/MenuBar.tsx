@@ -84,18 +84,13 @@ function MenuBar({ height }: MenuBarProps) {
         >
           <AllInclusiveIcon sx={{ mr: 1, width: '40px' }} />
           <Typography
-            variant="h6"
+            variant="h5"
             noWrap
-            component="a"
-            href="/"
+            onClick={handleClickHome}
             sx={{
-              mr: 2,
               display: 'flex',
-              fontFamily: 'monospace',
               fontWeight: 700,
               letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
             }}
           >
             Todo App

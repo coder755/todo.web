@@ -3,7 +3,7 @@ import {
 } from '@mui/material';
 import { useContext, useState } from 'react';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { BottomNavigation, NavigationItem } from '../../components/Navigation';
+import { NavigationItem } from '../../components/Navigation';
 import WrappedTodosDisplay from '../../displays/Todos/TodosDisplay';
 import { UserContext } from '../../context/UserContext';
 import Page from '../Page/Page';
@@ -41,14 +41,13 @@ function AccountPage() {
   ];
 
   return (
-    <Page isPublic={false}>
+    <Page isPublic={false} navigationItems={items}>
       <OuterStyledBox>
         {
         isLoading
           ? <CircularProgress sx={{ justifySelf: 'center', alignSelf: 'center' }} />
           : <InnerStyledBox>{Display}</InnerStyledBox>
       }
-        <BottomNavigation items={items} />
       </OuterStyledBox>
     </Page>
   );
