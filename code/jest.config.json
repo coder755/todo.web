@@ -1,9 +1,7 @@
 {
   "testEnvironment": "jsdom",
   "transform": {
-    "^.+\\.(t|j)sx?$": ["ts-jest", {
-      "isolatedModules": true,
-      "diagnostics": { "ignoreCodes": ["TS151001"] } 
-    }]
-  }
+    "^.+\\.(t|j)sx?$": "@swc/jest"
+  },
+  "testPathIgnorePatterns": ["/node_modules/", "/dist/", "/public/" ]
 }
