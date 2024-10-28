@@ -30,11 +30,10 @@ export const getTodos = async (): Promise<GetTodosResponse | TodoError> => {
       errorCode: TODO_ERROR_CODES.UNKNOWN,
     };
   } catch (e) {
-    const errorResponse: TodoError = {
+    return {
       success: false,
       errorCode: TODO_ERROR_CODES.UNKNOWN,
-    };
-    return errorResponse;
+    }
   }
 };
 

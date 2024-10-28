@@ -1,6 +1,7 @@
 export enum EnvTypes {
   PROD = 'PROD',
   DEV = 'DEV',
+  TEST = 'TEST'
 }
 
 export interface EnvConfig {
