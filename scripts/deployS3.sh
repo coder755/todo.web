@@ -37,6 +37,8 @@ else
    exit 123
 fi
 
+npm run test
+
 cd dist
 export AWS_DEFAULT_PROFILE=coderPark
 aws s3 cp . s3://todo.frontend.bucket --recursive
