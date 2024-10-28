@@ -33,7 +33,7 @@ export const getTodos = async (): Promise<GetTodosResponse | TodoError> => {
     return {
       success: false,
       errorCode: TODO_ERROR_CODES.UNKNOWN,
-    }
+    };
   }
 };
 

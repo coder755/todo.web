@@ -2,11 +2,12 @@
     "env": {
         "browser": true,
         "es2021": true,
-        "jest": true
+        "jest/globals": true
     },
     "extends": [
         "airbnb",
-        "airbnb-typescript"
+        "airbnb-typescript",
+        "plugin:jest/recommended"
     ],
     "overrides": [
         {
@@ -24,7 +25,8 @@
     },
     "plugins": [
         "react",
-        "react-refresh"
+        "react-refresh",
+        "jest"
     ],
     "rules": {
         "react/react-in-jsx-scope": "off"
