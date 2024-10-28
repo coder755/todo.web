@@ -1,11 +1,20 @@
 {
     "env": {
         "browser": true,
-        "es2021": true
+        "es2021": true,
+        "jest": true
     },
     "extends": [
-      "airbnb",
-      "airbnb-typescript"
+        "airbnb",
+        "airbnb-typescript"
+    ],
+    "overrides": [
+        {
+            "files": ["**/*.test.*", "**/__mocks__/**"],
+            "env": {
+                "jest": true
+            }
+        }
     ],
     "parser":"@typescript-eslint/parser",
     "parserOptions": {
