@@ -3,8 +3,11 @@ import {
 } from 'react';
 import { Authenticator, useAuthenticator } from '@aws-amplify/ui-react';
 import { configureAmplify } from '../auth/amplifyConfig';
-import WS, { getMessageType, MessageTypes } from '../api/WS';
 import { getUserIdToken } from '../util/authUtils';
+import {
+  getMessageType, MessageTypes, SendTokenRequest, SocketMessageType,
+  WEB_SOCKET_URL,
+} from '../types/wsTypes';
 
 type CallbackRequest = {
   id: string,
@@ -32,7 +35,7 @@ type RegisteredListeners = {
 interface IWebSocketState {
   registeredListeners: RegisteredListeners
   isLoading: boolean,
-  webSocket: WS | null
+  webSocket: WebSocket | null
 }
 
 const defaultState: IWebSocketState = {
@@ -61,12 +64,23 @@ function WebSocketProvider({ children }: WebSocketContextProps) {
 
   const handleOpen = async () => {
     setIsWebsocketOpen(true);
+    if (webSocket) {
+      const token = await getUserIdToken();
+      const data: SendTokenRequest = {
+        type: SocketMessageType.AddTokenRequest,
+        token,
+      };
+      const dataJson = JSON.stringify(data);
+      webSocket.send(dataJson);
+    }
     setIsLoading(false);
   };
+
   const handleClose = () => {
     setIsWebsocketOpen(false);
     setWebSocket(null);
   };
+
   const handleError = () => {
     console.log('handleError called');
   };
@@ -81,14 +95,13 @@ function WebSocketProvider({ children }: WebSocketContextProps) {
 
   const handleInitSocket = useCallback(() => {
     setIsLoading(true);
-    const ws = new WS({
-      onOpen: handleOpen,
-      onClose: handleClose,
-      onError: handleError,
-      onMessage: handleOnMessage,
-    });
-    setWebSocket(ws);
-    return ws;
+    const websocket = new WebSocket(WEB_SOCKET_URL);
+    websocket.onopen = handleOpen;
+    websocket.onclose = handleClose;
+    websocket.onerror = handleError;
+    websocket.onmessage = handleOnMessage;
+    setWebSocket(websocket);
+    return websocket;
   }, []);
 
   const handleRegisterListener = useCallback((type: MessageTypes, callback: CallbackRequest) => {
@@ -112,19 +125,6 @@ function WebSocketProvider({ children }: WebSocketContextProps) {
     }
     return () => {};
   }, [user]);
-
-  const handleSendToken = async () => {
-    if (webSocket) {
-      const token = await getUserIdToken();
-      webSocket.sendToken(token);
-    }
-  };
-
-  useEffect(() => {
-    if (isWebsocketOpen) {
-      handleSendToken();
-    }
-  }, [isWebsocketOpen]);
 
   const contextValue = useMemo<IWebSocketContext>(
     () => ({
