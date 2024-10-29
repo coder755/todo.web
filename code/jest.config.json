@@ -3,5 +3,6 @@
   "transform": {
     "^.+\\.(t|j)sx?$": "@swc/jest"
   },
-  "testPathIgnorePatterns": ["/node_modules/", "/dist/", "/public/" ]
+  "testPathIgnorePatterns": ["/node_modules/", "/dist/", "/public/" ],
+  "setupFilesAfterEnv": ["./jest-setup.ts"]
 }
