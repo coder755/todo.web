@@ -9,9 +9,9 @@ import {
   GetUserResponse, PostUserRequest, USER_ERROR_CODES, UserError,
 } from '../types/services/user/userTypes';
 import { WebSocketContext } from './WebSocketContext';
-import { MessageTypes } from '../api/WS';
+import { MessageTypes } from '../types/wsTypes';
 
-interface IUserContext {
+export interface IUserContext {
   user: User | null,
   signOut: (data?: AuthEventData | undefined) => void,
   isLoading: boolean,

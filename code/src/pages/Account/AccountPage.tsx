@@ -24,12 +24,10 @@ const OuterStyledBox = styled(Box)(() => ({
 
 function AccountPage() {
   const { isLoading } = useContext(UserContext);
-  const [Display, setDisplay] = useState<JSX.Element>(<WrappedTodosDisplay />);
+  const [Display, setDisplay] = useState<JSX.Element>(WrappedTodosDisplay);
 
   const handleTodoOnClick = () => {
-    setDisplay(
-      <WrappedTodosDisplay />,
-    );
+    setDisplay(WrappedTodosDisplay);
   };
 
   const items: NavigationItem[] = [
@@ -45,7 +43,7 @@ function AccountPage() {
       <OuterStyledBox>
         {
         isLoading
-          ? <CircularProgress sx={{ justifySelf: 'center', alignSelf: 'center' }} />
+          ? <CircularProgress sx={{ justifySelf: 'center', alignSelf: 'center' }} data-testid="AccountPage-Progress" />
           : <InnerStyledBox>{Display}</InnerStyledBox>
       }
       </OuterStyledBox>
